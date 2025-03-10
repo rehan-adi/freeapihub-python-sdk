@@ -1,24 +1,23 @@
-import httpx
-from freeapihub.config import API_URL
+from freeapihub.core.logger import logger
+from freeapihub.core.config import API_URL
+from freeapihub.core.http_client import async_client
 
 
 async def get_all_books():
     try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(f"{API_URL}/api/v1/books")
-            response.raise_for_status()
-            return response.json()
+        response = await async_client.get(f"{API_URL}/api/v1/books")
+        response.raise_for_status()
+        return response.json()
     except Exception as e:
-        print(f"Error fetching books: {e}")
+        logger.error(f"Error fetching books: {e}")
         return None
 
 
 async def get_book_by_id(book_id: str):
     try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(f"{API_URL}/api/v1/books/{book_id}")
-            response.raise_for_status()
-            return response.json()
+        response = await async_client.get(f"{API_URL}/api/v1/books/{book_id}")
+        response.raise_for_status()
+        return response.json()
     except Exception as e:
-        print(f"Error fetching book {book_id}: {e}")
+        logger.error(f"Error fetching book with ID {book_id}: {e}")
         return None
